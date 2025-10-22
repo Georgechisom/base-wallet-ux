@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Wallet UX Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen py-8">
+    <div class="max-w-2xl mx-auto px-4">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                Advanced Wallet UX Demo
+            </h1>
+            <p class="text-gray-600">
+                Base Account Sub Accounts & Spend Permissions
+            </p>
+        </header>
+
+        <main class="space-y-6">
+            <!-- Wallet Connection -->
+            <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+                <h2 class="text-xl font-bold mb-4">Base Account Connection</h2>
+                <button id="connectBtn" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                    Connect Base Account
+                </button>
+                <div id="accountInfo" class="hidden space-y-3 mt-4">
+                    <div class="p-3 bg-gray-50 rounded-md">
+                        <p class="text-sm font-semibold">Universal Account:</p>
+                        <p id="universalAddress" class="text-xs text-gray-600 break-all"></p>
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-md">
+                        <p class="text-sm font-semibold">Sub Account:</p>
+                        <p id="subAccountAddress" class="text-xs text-gray-600 break-all"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub Account Management -->
+            <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+                <h2 class="text-xl font-bold mb-4">Sub Account Management</h2>
+                <div id="subAccountStatus">
+                    <p class="text-sm text-gray-600">Connect wallet to manage sub accounts</p>
+                </div>
+            </div>
+
+            <!-- Spend Permissions -->
+            <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+                <h2 class="text-xl font-bold mb-4">Spend Permissions</h2>
+                <div id="permissionStatus">
+                    <p class="text-sm text-gray-600">Connect wallet to manage spend permissions</p>
+                </div>
+            </div>
+
+            <!-- Transaction Sender -->
+            <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+                <h2 class="text-xl font-bold mb-4">Transaction Sender</h2>
+                <div id="transactionStatus">
+                    <p class="text-sm text-gray-600">Connect wallet to send transactions</p>
+                </div>
+            </div>
+
+            <!-- OnchainKit Integration -->
+            <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+                <h2 class="text-xl font-bold mb-4">OnchainKit Integration</h2>
+                <div class="p-3 bg-green-50 rounded-md">
+                    <p class="text-sm font-semibold text-green-800">Integration Ready</p>
+                    <p class="text-xs text-gray-600 mt-1">
+                        This demo shows how OnchainKit and other Web3 libraries can integrate with Base Account Sub Accounts.
+                    </p>
+                    <p class="text-xs text-gray-600 mt-1">
+                        The full implementation includes Wagmi providers and hooks for seamless integration.
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-12 text-sm text-gray-500">
+            <p>Powered by Base Account SDK + OnchainKit</p>
+        </footer>
+    </div>
+
+    <script>
+        // Mock implementation to demonstrate the UI
+        document.getElementById('connectBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('connectBtn');
+            const accountInfo = document.getElementById('accountInfo');
+            const universalAddress = document.getElementById('universalAddress');
+            const subAccountAddress = document.getElementById('subAccountAddress');
+            
+            btn.textContent = 'Connecting...';
+            btn.disabled = true;
+            
+            // Simulate connection delay
+            setTimeout(() => {
+                const mockUniversalAddress = '0x1234567890abcdef1234567890abcdef12345678';
+                const mockSubAddress = '0xabcdef1234567890abcdef1234567890abcdef12';
+                
+                universalAddress.textContent = mockUniversalAddress;
+                subAccountAddress.textContent = mockSubAddress;
+                
+                accountInfo.classList.remove('hidden');
+                btn.textContent = 'Connected';
+                
+                // Update other sections
+                updateSubAccountStatus();
+                updatePermissionStatus();
+                updateTransactionStatus();
+            }, 1500);
+        });
+
+        function updateSubAccountStatus() {
+            const status = document.getElementById('subAccountStatus');
+            status.innerHTML = `
+                <div class="p-3 bg-green-50 rounded-md">
+                    <p class="text-sm font-semibold text-green-800">Sub Account Active</p>
+                    <p class="text-xs text-gray-600 mt-1">
+                        Sub Account can automatically spend from your main Base Account balance.
+                    </p>
+                </div>
+            `;
+        }
+
+        function updatePermissionStatus() {
+            const status = document.getElementById('permissionStatus');
+            status.innerHTML = `
+                <div class="space-y-3">
+                    <div class="p-3 bg-blue-50 rounded-md">
+                        <p class="text-sm font-semibold text-blue-800">Permission Active</p>
+                        <div class="mt-2 space-y-1">
+                            <p class="text-xs text-gray-600">
+                                <span class="font-medium">Allowance:</span> 1.0000 ETH
+                            </p>
+                            <p class="text-xs text-gray-600">
+                                <span class="font-medium">Period:</span> 30 days
+                            </p>
+                            <p class="text-xs text-gray-600">
+                                <span class="font-medium">Valid Until:</span> ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <button class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">
+                            Use Permission (Spend 0.1 ETH)
+                        </button>
+                        <button class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors">
+                            Revoke Permission
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateTransactionStatus() {
+            const status = document.getElementById('transactionStatus');
+            status.innerHTML = `
+                <div class="space-y-3">
+                    <p class="text-sm text-gray-600">
+                        Send transactions from your sub account. The sub account will automatically request funds from the main account if needed.
+                    </p>
+                    <div class="space-y-2">
+                        <button class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition-colors">
+                            Send Single Transaction
+                        </button>
+                        <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors">
+                            Send Batch Calls
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
